@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Weather.Api.Settings;
 using Weather.DataAccessLayer;
 using Weather.DataAccessLayer.Repositories;
 using Weather.ExternalServices.Wrapper;
@@ -31,18 +32,22 @@ builder.Services.AddMemoryCache();
 builder.Services.AddDbContext<WeatherDbContext>(options =>
 {
     // setting connection string for sqlite.
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnectionString"));
 });
 
 // Adding http clients
-builder.Services.AddHttpClient("CityApi", c =>
+builder.Services.AddHttpClient<IWrapperApiService, WrapperApiService>("CityApi", c =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["CityApiSettings:CityApiUrl"]);
+    var cityApiSettings = new CityApiSettings();
+    builder.Configuration.GetRequiredSection(nameof(CityApiSettings)).Bind(cityApiSettings);
+    c.BaseAddress = new Uri(cityApiSettings.ApiUrl);
 });
 
 builder.Services.AddHttpClient("WeatherApi", c => 
 {
-    c.BaseAddress = new Uri(builder.Configuration["WeatherApiSettings:WeatherApiUrl"]);
+    var weatherApiSettings = new WeatherApiSettings();
+    builder.Configuration.GetRequiredSection(nameof(WeatherApiSettings)).Bind(weatherApiSettings);
+    c.BaseAddress = new Uri(weatherApiSettings.ApiUrl);
 });
 
 // Registering city repository.

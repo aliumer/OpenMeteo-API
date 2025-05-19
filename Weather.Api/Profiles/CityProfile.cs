@@ -9,6 +9,7 @@ namespace Weather.Api.Profiles
         public CityProfile()
         {
             CreateMap<City, CityDto>();
+            CreateMap<City, CityDto>().ReverseMap();
         }
     }
 
