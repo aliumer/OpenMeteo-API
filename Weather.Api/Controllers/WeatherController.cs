@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Weather.Api.DTOs;
-using Weather.Api.Features.Weather.Commands;
 using Weather.Api.Features.Weather.Queries;
 
 namespace Weather.Api.Controllers
