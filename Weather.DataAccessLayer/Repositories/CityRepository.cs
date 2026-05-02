@@ -32,7 +32,10 @@ namespace Weather.DataAccessLayer.Repositories
 
         public async Task<bool> RecordExists(string cityName)
         {
-            return await Task.FromResult(_context.Cities.Count(c => c.Name.ToLower() == cityName.ToLower()) > 0);
+            var exists = await _context.Cities
+                .AnyAsync(c => c.Name.ToLower() == cityName.ToLower());
+            
+            return await Task.FromResult(exists);
         }
     }
 }

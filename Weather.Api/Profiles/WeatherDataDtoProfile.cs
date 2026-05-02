@@ -9,6 +9,7 @@ namespace Weather.Api.Profiles
         public WeatherDataDtoProfile()
         {
              CreateMap<WeatherDataDto, WeatherData>();
+            CreateMap<WeatherDataDto, WeatherData>().ReverseMap();
         }
     }
 }
